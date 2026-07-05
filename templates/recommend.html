@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Movie Recommendation System</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+</head>
+
+<body id="content">
+	<div class="page-shell page-shell--detail">
+	  <div class="results page-title">
+	    <center>
+	      <span class="eyebrow">Selected movie</span>
+	      <h2 id="name" class="text-uppercase">{{title}}</h2>
+	    </center>
+	  </div>
+
+	  <section class="detail-card">
+	    <div id="mycontent">
+	      <div id="mcontent">
+	        <div class="poster-lg">
+	          <img class="poster poster-float" height="400" width="300" src={{poster}}>
+	        </div>
+	        <div class="poster-sm text-center">
+	          <img class="poster poster-float" height="400" width="300" src={{poster}}>
+	        </div>
+	        <div id="details" class="details-panel">
+	          <div class="detail-grid">
+	            <div class="detail-item detail-item--full">
+	              <span class="detail-label">Overview</span>
+	              <p id="overview">{{overview}}</p>
+	            </div>
+	            <div class="detail-item">
+	              <span class="detail-label">Rating</span>
+	              <p id="vote_average">{{vote_average}}/10 <span class="muted">({{vote_count}} votes)</span></p>
+	            </div>
+	            <div class="detail-item">
+	              <span class="detail-label">Genre</span>
+	              <p id="genres">{{genres}}</p>
+	            </div>
+	            <div class="detail-item">
+	              <span class="detail-label">Release date</span>
+	              <p id="date">{{release_date}}</p>
+	            </div>
+	            <div class="detail-item">
+	              <span class="detail-label">Runtime</span>
+	              <p id="runtime">{{runtime}}</p>
+	            </div>
+	            <div class="detail-item">
+	              <span class="detail-label">Status</span>
+	              <p id="status">{{status}}</p>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </section>
+
+{% for name, details in cast_details.items() if not cast_details.hidden %}
+  <div class="modal fade" id="{{details[0]}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel3">{{name}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <img class="profile-pic" src="{{details[1]}}" alt="{{name}} - profile" style="width: 250px;height:400px;border-radius: 10px;" />
+          <div style="margin-left: 20px">
+            <p><strong>Birthday:</strong> {{details[2]}} </p>
+            <p><strong>Place of Birth:</strong> {{details[3]}} </p>
+            <p><strong>Biography:</strong></p>
+            <p>{{details[4]}}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+	  {% if casts|length > 1 %}
+	  <div class="movie">
+	    <center>
+	      <span class="eyebrow">Cast spotlight</span>
+	      <h3>Top Cast</h3>
+	      <h5>Click any card to view actor details</h5>
+	    </center>
+	  </div>
+
+	  <div class="movie-content">
+	        {% for name, details in casts.items() if not casts.hidden %}
+	          <div class="castcard card cinematic-card" style="width: 15rem;" title="Click to know more about {{name}}" data-toggle="modal" data-target="#{{details[0]}}">
+	            <div class="imghvr">
+	              <img class="card-img-top cast-img" id="{{details[0]}}" height="360" width="240" alt="{{name}} - profile" src="{{details[2]}}">
+	              <figcaption class="fig">
+	                <button class="card-btn btn btn-danger"> Know More </button>
+	              </figcaption>
+	            </div>
+	            <div class="card-body">
+	              <h5 class="card-title">{{name|title}}</h5>
+	              <h5 class="card-title"><span style="color:rgba(244,247,251,0.72);font-size: 18px;">Character: {{details[1]|title}}</span></h5>
+	            </div>
+	          </div>
+	      {% endfor %}
+	    </div>
+	{% endif %}
+
+	  <center>
+	    {% if reviews %}
+	    <div class="movie">
+	      <span class="eyebrow">Audience response</span>
+	      <h3>User Reviews</h3>
+	    </div>
+	     <div class="col-md-12 review-table-wrap" style="margin-top:25px;">
+	        <table class="table table-bordered review-table" bordercolor="white">
+	            <thead>
+	                <tr>
+	                    <th class="text-center" scope="col" style="width: 75%">Comments</th>
+	                    <th class="text-center" scope="col">Sentiments</th>
+	                </tr>
+	            </thead>
+	    
+	            <tbody>
+		      {% for review, status in reviews.items() if not reviews.hidden %}
+		      <tr>
+	              	  <td>{{review}}</td>
+		              <td><center>{{status}}</center></td>
+	          		</tr>
+	      		{% endfor %}
+	    	</tbody>
+	 	 </table>
+	    </div>
+	    {% endif %}
+	  </center>
+
+	  {% if movie_cards|length > 1 %}
+	  <div class="movie">
+	    <center>
+	      <span class="eyebrow">Similar titles</span>
+	      <h3>Recommended Movies For You</h3>
+	      <h5>Click any card to refresh the recommendation chain</h5>
+	    </center>
+	  </div>
+
+	  <div class="movie-content">
+	    {% for poster, title in movie_cards.items() if not movie_cards.hidden %}
+	      <div class="card cinematic-card" style="width: 15rem;" title="{{title}}" onclick="recommendcard(this)">
+	        <div class="imghvr">
+	          <img class="card-img-top" height="360" width="240" alt="{{title}} - poster" src={{poster}}>
+	          <figcaption class="fig">
+	            <button class="card-btn btn btn-danger"> Click Me </button>
+	          </figcaption>
+	         </div>
+	        <div class="card-body">
+	          <h5 class="card-title">{{title|capitalize}}</h5>
+	        </div>
+	      </div>
+	  {% endfor %}
+	  </div>
+	  {% endif %}
+	</div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='recommend.js')}}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9j/ScQsAP7hfeJQGiRRSQQxSfFWpi1MquYl" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEJQGiRRSQQxSfFWpi1MquYl" crossorigin="anonymous"></script>
+</body>
+</html>

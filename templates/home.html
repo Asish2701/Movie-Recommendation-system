@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie Recommendation System</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+  <script type="text/javascript">
+    var films = {{suggestions|tojson}};
+  </script>
+</head>
+
+<body id="content">
+	<div class="page-shell">
+	  <section class="hero-panel">
+	    <div class="hero-copy">
+	      <span class="eyebrow">Curated film picks</span>
+	      <h1>Movie Recommendation System</h1>
+	      <p>Type a title, discover similar films, and explore cast details and review sentiment in one place.</p>
+	    </div>
+	    <div class="hero-stat">
+	      <div class="stat-pill"><i class="fa fa-film"></i><span>Recommendation engine</span></div>
+	      <div class="stat-pill"><i class="fa fa-star"></i><span>Cast and review insights</span></div>
+	      <div class="stat-pill"><i class="fa fa-bolt"></i><span>Fast autocomplete search</span></div>
+	    </div>
+	  </section>
+
+	  <section class="search-panel ml-container" style="display:block;">
+	    <div class="form-group shadow-textarea search-wrap">
+	      <label for="autoComplete" class="search-label">Search movie title</label>
+	      <input type="text" name="movie" class="movie form-control" id="autoComplete" autocomplete="off" placeholder="Try Inception, Interstellar, or Joker" required="required" />
+	    </div>
+
+	    <div class="form-group text-center">
+	      <button class="btn btn-primary btn-block movie-button" disabled="true">Enter</button>
+	    </div>
+	  </section>
+
+	  <div class="search-hint text-center">Use the search bar above to generate recommendations instantly.</div>
+	</div>
+
+  <div class="fail">
+    <center><h3>Sorry! The Requested Movie is not in our Database</h3></center>
+  </div>
+	<div class="results">
+    <center>
+      <h2 id="name" class="text-uppercase"></h2>
+    </center>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='autocomplete.js')}}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="{{url_for('static', filename='recommend.js')}}"></script>
+</body>
+</html>
